@@ -16,21 +16,21 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      secretOrKey: configService.getOrThrow<string>('JWT_SECRET'),
     });
   }
 
   // Hàm này sẽ được Passport gọi sau khi xác thực token thành công
   async validate(payload: { sub: number; username: string }): Promise<User> {
     const { sub: id } = payload;
-    
+
     // Tìm người dùng trong DB dựa trên ID từ token
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user || !user.isActive) {
       throw new UnauthorizedException('User not found or account is inactive.');
     }
-    
+
     // Passport sẽ tự động đính kèm user này vào `request.user`
     return user;
   }

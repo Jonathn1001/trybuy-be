@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Post,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
@@ -10,9 +17,7 @@ import { LoginDto } from './dto/login.dto';
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
-  constructor(
-    private readonly authService: AuthService
-  ) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('send-otp')
   @HttpCode(HttpStatus.OK)
@@ -20,9 +25,9 @@ export class AuthController {
     return this.authService.sendRegistrationOtp(sendOtpDto.email);
   }
 
-  @Post("register")
+  @Post('register')
   async register(@Body() register: RegisterDto): Promise<RegisterUserVo> {
-    return this.authService.register(register)
+    return this.authService.register(register);
   }
 
   @Post('login')
@@ -31,4 +36,3 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 }
-
