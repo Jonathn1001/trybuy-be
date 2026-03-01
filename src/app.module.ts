@@ -46,7 +46,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USER'),
@@ -54,6 +54,9 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
         database: configService.get<string>('DB_NAME'),
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE') ?? true,
         logging: configService.get<boolean>('DB_LOGGING') ?? false,
+        ssl: {
+          rejectUnauthorized: false,
+        },
         entities: [User, Role, Permission],
         migrations: [],
         subscribers: [],
